@@ -5,6 +5,7 @@
 
 #include <glm/glm.hpp>
 
+#define ACTION_COOLDOWN 0.5f // seconds
 
 struct PlayMode : Mode {
 	PlayMode();
@@ -26,5 +27,5 @@ struct PlayMode : Mode {
 	glm::u8vec3 background_color = glm::u8vec3(2.0f, 0.0f, 0.0f);
 
 	// Hack to prevent single button press advancing several scenes
-	float cooldown = 0.05f; // seconds
+	float cooldown = ACTION_COOLDOWN;
 };

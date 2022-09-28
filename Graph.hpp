@@ -5,7 +5,7 @@
 #include <vector>
 
 
-#define MAX_CHOICES 4
+#define MAX_CHOICES 3
 
 
 // Specialized state graph for choice-based game

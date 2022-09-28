@@ -8,6 +8,8 @@
 #include <sstream>
 
 
+#define VERBOSE
+
 // #define DEBUG
 
 // Debug logging
@@ -92,10 +94,9 @@ Graph::Graph(std::string filepath) {
 		LOG("\n");
 	}
 
-	print();
-
-	std::cout << "start node: " << std::endl;
-	graph[start_idx].print();
+	// print();
+	// std::cout << "start node: " << std::endl;
+	// graph[start_idx].print();
 
 	// Current node is start node
 	start_idx = 0;
@@ -133,5 +134,5 @@ void Graph::make_choice(unsigned int choice_idx) {
 
 	current_idx = graph_idx;
 
-	get_current_node().print();
+	// get_current_node().print();
 }

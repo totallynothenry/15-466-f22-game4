@@ -32,6 +32,8 @@
 #endif
 
 
+#define X_MAX 1280.0f
+
 // Text Program --------------------------------------------------
 
 struct TextProgram {
@@ -129,7 +131,9 @@ static Load< void > setup_buffers(LoadTagDefault, [](){
 });
 
 
-Text::Text(std::string font_file_path, unsigned int font_size) {
+Text::Text(std::string font_file_path, unsigned int size) {
+	font_size = size;
+
 	// From HalfBuzz-FreeType tutorial (see comment at beginning of file)
 	if (FT_Init_FreeType(&ft_library)) {
 		throw std::runtime_error("Failed to init ft_library");
@@ -286,4 +290,83 @@ void Text::display(std::string const &text, glm::uvec2 const &drawable_size, flo
 
 	// Reset buffer for next display
 	hb_buffer_reset(hb_buffer);
+}
+
+void Text::display_wrapped(std::string const &text, glm::uvec2 const &drawable_size, float x, float y,
+		float const &scale, glm::vec3 const &color) {
+	std::vector< std::string > lines;
+	lines.emplace_back(text);
+	int idx = 0;
+
+	// From HalfBuzz-FreeType tutorial (see comment at beginning of file)
+	hb_glyph_info_t *info;
+	hb_glyph_position_t *pos;
+	unsigned int len;
+	float xpos_max = static_cast< float >(drawable_size.x) - x;
+	while (idx < lines.size()) {
+		std::string line = lines[idx];
+
+		// From HalfBuzz-FreeType tutorial (see comment at beginning of file)
+
+		// Load into buffer and then guess
+		hb_buffer_add_utf8(hb_buffer, line.c_str(), -1, 0, -1);
+		hb_buffer_guess_segment_properties(hb_buffer);
+
+		// Shape
+		hb_shape(hb_font, hb_buffer, NULL, 0);
+
+		/**
+		 * Get glyph info and position for rendering
+		 *
+		 * For reference:
+		 * ---
+		 * typedef struct {
+		 *     hb_codepoint_t codepoint; <-- is glyph index after shaping
+		 *     uint32_t       cluster;
+		 * } hb_glyph_info_t;
+		 * ---
+		 * typedef struct {
+		 *     hb_position_t  x_advance;
+		 *     hb_position_t  y_advance;
+		 *     hb_position_t  x_offset;
+		 *     hb_position_t  y_offset;
+		 * } hb_glyph_position_t;
+		 */
+
+		info = hb_buffer_get_glyph_infos(hb_buffer, NULL);
+		pos = hb_buffer_get_glyph_positions (hb_buffer, NULL);
+		len = hb_buffer_get_length(hb_buffer);
+
+		// Hacky text wrap. Uses provided x to calculate right-margin as well
+		float xpos = x;
+		unsigned int last_whitepsace = 0;
+		for (unsigned int i = 0; i < len; i++) {
+			if (line[i] == ' ') {
+				last_whitepsace = i;
+			}
+
+			xpos += (pos[i].x_advance >> 6) * scale;
+
+			if (xpos > xpos_max) {
+				// Line too long, split and add a new line, then retry wrap
+				if (last_whitepsace == 0) {
+					lines[idx] = line.substr(0, i-2) + "-";
+					lines.emplace_back(line.substr(i-2));
+				} else {
+					lines[idx] = line.substr(0, last_whitepsace);
+					lines.emplace_back(line.substr(last_whitepsace + 1));
+				}
+				break;
+			}
+		}
+
+		hb_buffer_reset(hb_buffer);
+		idx++;
+	}
+
+	float ypos = y;
+	for (auto &line : lines) {
+		display(line, drawable_size, x, ypos, scale, color);
+		ypos -= static_cast< float >(font_size) * scale * 1.5f;
+	}
 }

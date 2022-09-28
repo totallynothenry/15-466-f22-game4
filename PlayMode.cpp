@@ -93,19 +93,19 @@ void PlayMode::update(float elapsed) {
 		cooldown = std::max(0.0f, cooldown - elapsed);
 	} else {
 		if (restart.pressed) {
-			cooldown = 1.0;
+			cooldown = ACTION_COOLDOWN;
 			state_graph->current_idx = state_graph->start_idx;
 		} else if (one.pressed) {
 			state_graph->make_choice(1);
-			cooldown = 1.0;
+			cooldown = ACTION_COOLDOWN;
 		} else if (two.pressed) {
-			cooldown = 1.0;
+			cooldown = ACTION_COOLDOWN;
 			state_graph->make_choice(2);
 		} else if (three.pressed) {
-			cooldown = 1.0;
+			cooldown = ACTION_COOLDOWN;
 			state_graph->make_choice(3);
 		} else if (four.pressed) {
-			cooldown = 1.0;
+			cooldown = ACTION_COOLDOWN;
 			state_graph->make_choice(4);
 		}
 	}
@@ -131,8 +131,10 @@ void PlayMode::draw(glm::uvec2 const &window_size) {
 	Graph::Node &node = state_graph->get_current_node();
 
 	// Display state
-	monofet_regular_text->display(node.name, window_size, 50.0f, 625.0f, 1.0f, NAME_COLOR);
-	share_tech_mono_regular_text->display(node.description, window_size, 75.0f, 525.0f, 0.375f, DESC_COLOR);
+	float ypos = static_cast< float >(window_size.y) - 100.0f;
+	monofet_regular_text->display(node.name, window_size, 50.0f, ypos, 1.0f, NAME_COLOR);
+	ypos -= 75.0f;
+	share_tech_mono_regular_text->display_wrapped(node.description, window_size, 75.0f, ypos, 0.3f, DESC_COLOR);
 
 	for (int i = 0; i < MAX_CHOICES; i++) {
 		if (node.choice_texts[i].empty()) {
