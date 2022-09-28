@@ -6,9 +6,8 @@
 #include <fstream>
 #include <stdexcept>
 #include <sstream>
+#include <vector>
 
-
-#define VERBOSE
 
 // #define DEBUG
 
