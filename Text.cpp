@@ -299,7 +299,6 @@ void Text::display_wrapped(std::string const &text, glm::uvec2 const &drawable_s
 	int idx = 0;
 
 	// From HalfBuzz-FreeType tutorial (see comment at beginning of file)
-	hb_glyph_info_t *info;
 	hb_glyph_position_t *pos;
 	unsigned int len;
 	float xpos_max = static_cast< float >(drawable_size.x) - x;
@@ -332,8 +331,6 @@ void Text::display_wrapped(std::string const &text, glm::uvec2 const &drawable_s
 		 *     hb_position_t  y_offset;
 		 * } hb_glyph_position_t;
 		 */
-
-		info = hb_buffer_get_glyph_infos(hb_buffer, NULL);
 		pos = hb_buffer_get_glyph_positions (hb_buffer, NULL);
 		len = hb_buffer_get_length(hb_buffer);
 
