@@ -302,7 +302,7 @@ void Text::display_wrapped(std::string const &text, glm::uvec2 const &drawable_s
 	hb_glyph_position_t *pos;
 	unsigned int len;
 	float xpos_max = static_cast< float >(drawable_size.x) - x;
-	while (idx < lines.size()) {
+	while (idx < (int)lines.size()) {
 		std::string line = lines[idx];
 
 		// From HalfBuzz-FreeType tutorial (see comment at beginning of file)

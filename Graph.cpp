@@ -103,8 +103,8 @@ Graph::Graph(std::string filepath) {
 	current_idx = start_idx;
 
 	// Some sanity checks
-	assert(0 <= current_idx && current_idx < graph.size());
-	assert(0 <= start_idx && start_idx < graph.size());
+	assert(0 <= current_idx && current_idx < (int)graph.size());
+	assert(0 <= start_idx && start_idx < (int)graph.size());
 }
 
 void Graph::print() {
@@ -117,7 +117,7 @@ void Graph::print() {
 }
 
 inline Graph::Node &Graph::get_current_node() {
-	assert(0 <= current_idx && current_idx < graph.size());
+	assert(0 <= current_idx && current_idx < (int)graph.size());
 	return graph[current_idx];
 }
 
@@ -130,7 +130,7 @@ void Graph::make_choice(unsigned int choice_idx) {
 	if (graph_idx < 0) {
 		return;
 	}
-	assert(0 <= graph_idx && graph_idx < graph.size());
+	assert(0 <= graph_idx && graph_idx < (int)graph.size());
 
 	current_idx = graph_idx;
 
