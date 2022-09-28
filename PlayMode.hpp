@@ -25,6 +25,6 @@ struct PlayMode : Mode {
 
 	glm::u8vec3 background_color = glm::u8vec3(2.0f, 0.0f, 0.0f);
 
-	// TODO
-
+	// Hack to prevent single button press advancing several scenes
+	float cooldown = 0.05f; // seconds
 };

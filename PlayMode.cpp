@@ -9,14 +9,18 @@
 #define FONT_SIZE 72
 
 // Colors for display
+static glm::vec3 const NAME_COLOR = glm::vec3(1.0f, 0.25f, 0.0f);
 static glm::vec3 const DESC_COLOR = glm::vec3(1.0f, 1.0f, 1.0f);
 static glm::vec3 const CHOICE_COLOR = glm::vec3(0.0f, 1.0f, 0.4f);
 
-static Text *red_hat_mono_text = nullptr;
+static Text *monofet_regular_text = nullptr;
+static Text *share_tech_mono_regular_text = nullptr;
+
 static Graph *state_graph = nullptr;
 
 static Load< void > load_fonts(LoadTagDefault, [](){
-	red_hat_mono_text = new Text(data_path("font/RedHatMono-Medium.ttf"), FONT_SIZE);
+	monofet_regular_text = new Text(data_path("font/Monofett-Regular.ttf"), FONT_SIZE);
+	share_tech_mono_regular_text = new Text(data_path("font/ShareTechMono-Regular.ttf"), FONT_SIZE);
 });
 
 static Load< void > load_state_graph(LoadTagDefault, [](){
@@ -27,8 +31,11 @@ PlayMode::PlayMode() {
 }
 
 PlayMode::~PlayMode() {
-	if (red_hat_mono_text != nullptr) {
-		delete red_hat_mono_text;
+	if (monofet_regular_text != nullptr) {
+		delete monofet_regular_text;
+	}
+	if (share_tech_mono_regular_text != nullptr) {
+		delete share_tech_mono_regular_text;
 	}
 	if (state_graph != nullptr) {
 		delete state_graph;
@@ -82,16 +89,25 @@ bool PlayMode::handle_event(SDL_Event const &evt, glm::uvec2 const &window_size)
 }
 
 void PlayMode::update(float elapsed) {
-	if (restart.pressed) {
-		state_graph->current_idx = state_graph->start_idx;
-	} else if (one.pressed) {
-		state_graph->make_choice(1);
-	} else if (two.pressed) {
-		state_graph->make_choice(2);
-	} else if (three.pressed) {
-		state_graph->make_choice(3);
-	} else if (four.pressed) {
-		state_graph->make_choice(4);
+	if (cooldown > 0) {
+		cooldown = std::max(0.0f, cooldown - elapsed);
+	} else {
+		if (restart.pressed) {
+			cooldown = 1.0;
+			state_graph->current_idx = state_graph->start_idx;
+		} else if (one.pressed) {
+			state_graph->make_choice(1);
+			cooldown = 1.0;
+		} else if (two.pressed) {
+			cooldown = 1.0;
+			state_graph->make_choice(2);
+		} else if (three.pressed) {
+			cooldown = 1.0;
+			state_graph->make_choice(3);
+		} else if (four.pressed) {
+			cooldown = 1.0;
+			state_graph->make_choice(4);
+		}
 	}
 
 	//reset button press counters:
@@ -114,16 +130,17 @@ void PlayMode::draw(glm::uvec2 const &window_size) {
 
 	Graph::Node &node = state_graph->get_current_node();
 
-	// Display text
-	red_hat_mono_text->display(node.description, window_size, 50.0f, 650.0f, 0.25f, DESC_COLOR);
+	// Display state
+	monofet_regular_text->display(node.name, window_size, 50.0f, 625.0f, 1.0f, NAME_COLOR);
+	share_tech_mono_regular_text->display(node.description, window_size, 75.0f, 525.0f, 0.375f, DESC_COLOR);
 
 	for (int i = 0; i < MAX_CHOICES; i++) {
 		if (node.choice_texts[i].empty()) {
 			continue;
 		}
-		red_hat_mono_text->display(
+		share_tech_mono_regular_text->display(
 			std::to_string(i+1) + ": " + node.choice_texts[i],
-			window_size, 50.0f, 50.0f * (MAX_CHOICES - i), 0.25f, CHOICE_COLOR);
+			window_size, 100.0f, 50.0f * (MAX_CHOICES - i), 0.375f, CHOICE_COLOR);
 	}
 	GL_ERRORS();
 }

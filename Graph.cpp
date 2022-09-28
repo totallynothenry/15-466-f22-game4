@@ -28,6 +28,7 @@ inline bool Graph::Node::is_win() {
 
 void Graph::Node::print() {
 	std::cout << "----------------------------" << std::endl;
+	std::cout << "Name: " << name << std::endl;
 	std::cout << "Description: " << description << std::endl;
 	std::cout << "Win: " << win << std::endl;
 	for (int i = 0; i < MAX_CHOICES; i++) {
@@ -60,18 +61,25 @@ Graph::Graph(std::string filepath) {
 		if (!std::getline(linestream, token, '|')) {
 			break;
 		}
-		LOG("description" << token);
+		LOG("name" << token);
 		graph.emplace_back();
 		Node &state = graph.back();
 		state.win = false;
+		state.name = token;
+
+		if (!std::getline(linestream, token, '|')) {
+			break;
+		}
+
+		LOG("description" << token);
 		state.description = token;
-		for (int i = 0; i < MAX_CHOICES; i++) {
-			std::getline(linestream, token, '|');
+
+		for (int i = 0; i < MAX_CHOICES && std::getline(linestream, token, '|'); i++) {
 			LOG("choice text[" << i+1 << "]: " << token);
 			state.choice_texts[i] = token;
 		}
-		for (int i = 0; i < MAX_CHOICES; i++) {
-			std::getline(linestream, token, '|');
+
+		for (int i = 0; i < MAX_CHOICES && std::getline(linestream, token, '|'); i++) {
 			LOG("choice[" << i+1 << "]: " << token);
 			state.choices[i] = stoi(token);
 		}
@@ -124,4 +132,6 @@ void Graph::make_choice(unsigned int choice_idx) {
 	assert(0 <= graph_idx && graph_idx < graph.size());
 
 	current_idx = graph_idx;
+
+	get_current_node().print();
 }

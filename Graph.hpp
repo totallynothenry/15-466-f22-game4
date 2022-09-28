@@ -8,9 +8,10 @@
 #define MAX_CHOICES 4
 
 
-// Sepcialized state graph for choice-based game
+// Specialized state graph for choice-based game
 struct Graph { // Direct graph
 	struct Node { // Represents a single state
+		std::string name;
 		std::string description; // Description of the state, dislayed on screen
 		std::array< std::string, MAX_CHOICES > choice_texts; // Description of each choice (a.k.a outgoing edge)
 		bool win; // Indicates if this state is a win state (checked when choices are all null)
