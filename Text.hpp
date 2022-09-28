@@ -6,6 +6,7 @@
 #include <string>
 #include <unordered_map>
 
+
 struct Text {
 	// Character (from OpenGL-FreeType tutorial)
 	struct Glyph {

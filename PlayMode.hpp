@@ -21,9 +21,8 @@ struct PlayMode : Mode {
 	struct Button {
 		uint8_t downs = 0;
 		uint8_t pressed = 0;
-	} left, right, down, up;
+	} one, two, three, four, restart;
 
-	glm::uvec2 window_size;
 	glm::u8vec3 background_color = glm::u8vec3(2.0f, 0.0f, 0.0f);
 
 	// TODO

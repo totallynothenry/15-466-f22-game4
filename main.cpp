@@ -66,9 +66,9 @@ int main(int argc, char **argv) {
 
 	//create window:
 	SDL_Window *window = SDL_CreateWindow(
-		"gp22 game4: choice-based game", //TODO: remember to set a title for your game!
+		"Escape from Lagrange Station",
 		SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-		1280, 720, //TODO: modify window size if you'd like
+		1280, 720,
 		SDL_WINDOW_OPENGL
 		| SDL_WINDOW_RESIZABLE //uncomment to allow resizing
 		| SDL_WINDOW_ALLOW_HIGHDPI //uncomment for full resolution on high-DPI screens
@@ -184,7 +184,7 @@ int main(int argc, char **argv) {
 
 		{ //(3) call the current mode's "draw" function to produce output:
 		
-			Mode::current->draw(drawable_size);
+			Mode::current->draw(window_size);
 		}
 
 		//Wait until the recently-drawn frame is shown before doing it all again:

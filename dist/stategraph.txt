@@ -1,0 +1,2 @@
+Hello world!|Go to win|Stay here!|||1|0|-1|-1
+You win!|||||-1|-1|-1|-1
