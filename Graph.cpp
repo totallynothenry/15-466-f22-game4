@@ -6,7 +6,6 @@
 #include <fstream>
 #include <stdexcept>
 #include <sstream>
-#include <vector>
 
 
 // #define DEBUG
@@ -115,7 +114,7 @@ void Graph::print() {
 	}
 }
 
-inline Graph::Node &Graph::get_current_node() {
+Graph::Node &Graph::get_current_node() {
 	assert(0 <= current_idx && current_idx < (int)graph.size());
 	return graph[current_idx];
 }

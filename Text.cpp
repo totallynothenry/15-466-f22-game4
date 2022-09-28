@@ -19,9 +19,10 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <math.h>
 #include <stdexcept>
+#include <vector>
 
 
-#define DEBUG
+// #define DEBUG
 
 // Debug logging
 #ifdef DEBUG

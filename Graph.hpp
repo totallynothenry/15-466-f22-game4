@@ -31,7 +31,7 @@ struct Graph { // Direct graph
 	Graph(std::string csv_filepath);
 
 	// Gets a reference to the current node
-	inline Node &get_current_node();
+	Node &get_current_node();
 
 	// Go to next state after making choice at current state (also updates current state)
 	void make_choice(unsigned int choice_idx);
